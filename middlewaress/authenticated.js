@@ -1,7 +1,6 @@
 import { jwt } from "../utils/index.js";
 
 function asureAuth(req, res, next) {
-  console.log("entroooo", req.headers.authorization);
   if (!req.headers.authorization) {
     return res.status(403).send({ message: "La peticion no tiene token" });
   }

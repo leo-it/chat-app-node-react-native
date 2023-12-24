@@ -10,3 +10,5 @@ const ChatSchema = mongoose.Schema({
     ref: "User",
   },
 });
+
+export const Chat = mongoose.model("Chat", ChatSchema);

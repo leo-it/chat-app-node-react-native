@@ -1,4 +1,4 @@
-import { authRoutes, userRoutes } from "./routes/index.js";
+import { authRoutes, chatRoutes, userRoutes } from "./routes/index.js";
 
 import bodyParser from "body-parser";
 import cors from "cors";
@@ -28,5 +28,6 @@ app.use(morgan("dev"));
 //configure routing
 app.use("/api", authRoutes);
 app.use("/api", userRoutes);
+app.use("/api", chatRoutes);
 
 export { server };
