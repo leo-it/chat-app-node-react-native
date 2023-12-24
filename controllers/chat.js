@@ -1,4 +1,4 @@
-import { Chat } from "../models/index.js";
+import { Chat, ChatMessage } from "../models/index.js";
 
 async function create(req, res) {
   const { participant_id_one, participant_id_two } = req.body;
@@ -48,8 +48,22 @@ async function getAll(req, res) {
       .populate("participant_one")
       .populate("participant_two")
       .exec();
-    //todo obtener fecha del ultimo mensaje de cada chat
-    res.status(200).send(chats);
+
+    const arratChats = [];
+
+    for await (const chat of chats) {
+      console.log(chat._id, "chat._id");
+      const response = await ChatMessage.findOne({ chat: chat._id }).sort({
+        createdAt: -1,
+      });
+      console.log(response, "response");
+      arratChats.push({
+        ...chat._doc,
+        last_message_date: response?.createdAt || null,
+      });
+    }
+
+    res.status(200).send(arratChats);
   } catch (error) {
     console.error(error);
     res.status(500).send({ msg: "Error del servidor" });
@@ -77,23 +91,22 @@ async function deleteChat(req, res) {
 }
 
 async function getChat(req, res) {
-    const chat_id = req.params.id;
-    try {
-      // Utiliza await para manejar la ejecución de la consulta
-      const chatStorage = await Chat.findById(chat_id)
-        .populate("participant_one")
-        .populate("participant_two");
-  
-      if (!chatStorage) {
-        return res.status(404).json({ msg: "Chat no encontrado" });
-      }
-  
-      res.status(200).json(chatStorage);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ msg: "Error en la búsqueda del chat" });
+  const chat_id = req.params.id;
+  try {
+    // Utiliza await para manejar la ejecución de la consulta
+    const chatStorage = await Chat.findById(chat_id)
+      .populate("participant_one")
+      .populate("participant_two");
+
+    if (!chatStorage) {
+      return res.status(404).json({ msg: "Chat no encontrado" });
     }
+
+    res.status(200).json(chatStorage);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "Error en la búsqueda del chat" });
   }
-  
+}
 
 export const ChatController = { create, getAll, deleteChat, getChat };
