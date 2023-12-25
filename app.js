@@ -2,6 +2,7 @@ import {
   authRoutes,
   chatMessageRoutes,
   chatRoutes,
+  groupRoutes,
   userRoutes,
 } from "./routes/index.js";
 
@@ -35,5 +36,6 @@ app.use("/api", authRoutes);
 app.use("/api", userRoutes);
 app.use("/api", chatRoutes);
 app.use("/api", chatMessageRoutes);
+app.use("/api", groupRoutes);
 
 export { server };

@@ -3,7 +3,7 @@ import jsonwebToken from "jsonwebtoken";
 
 function createAccessToken(user) {
   const expToken = new Date();
-  expToken.setHours(expToken.getHours() + 24);
+  expToken.setHours(expToken.getHours() + 48);
 
   const payload = {
     token_type: "access",
